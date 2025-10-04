@@ -1,12 +1,7 @@
-import { useState, useEffect } from "react";
-import {
-  useAccount,
-  useSignMessage,
-  useWriteContract,
-  useReadContract,
-} from "wagmi";
+import { useState } from "react";
+import { useAccount, useSignMessage, useWriteContract } from "wagmi";
 import { recoverMessageAddress } from "viem";
-import { ethers } from "ethers";
+
 import "./App.css";
 
 // Contract configuration
@@ -26,7 +21,7 @@ function App() {
     useWriteContract();
   const [message, setMessage] = useState("");
   const [recoveredAddress, setRecoveredAddress] = useState("");
-  const [storedMessages, setStoredMessages] = useState([]);
+
   const [isStored, setIsStored] = useState(false);
 
   const handleSignMessage = async () => {
