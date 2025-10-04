@@ -19,7 +19,7 @@ const projectId = "a14a5096e588b25b36d5f2d2bb83075f"; // Replace with your actua
 const metadata = {
   name: "Message Signer",
   description: "Sign messages with your wallet",
-  url: "http://localhost:5173", // origin must match your domain & subdomain
+  url: "https://wcsigner.vercel.app", // origin must match your domain & subdomain
   icons: ["https://avatars.githubusercontent.com/u/179229932"],
 };
 
