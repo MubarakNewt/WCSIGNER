@@ -121,7 +121,8 @@ section h2 {
 /* Button styles */
 .sign-button,
 .recover-button,
-.reset-button {
+.reset-button,
+.store-button {
   padding: 0.75rem 1.5rem;
   border: none;
   border-radius: 8px;
@@ -176,6 +177,25 @@ section h2 {
   box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
 }
 
+.store-button {
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+  color: white;
+  margin-top: 1rem;
+}
+
+.store-button:hover:not(:disabled) {
+  background: linear-gradient(135deg, #7c3aed, #6d28d9);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
+}
+
+.store-button:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
 /* Result boxes */
 .result-box {
   background: #f8fafc;
@@ -222,6 +242,22 @@ section h2 {
   background: #fef2f2;
   color: #991b1b;
   border: 1px solid #fecaca;
+}
+
+/* Success message */
+.success-message {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: #dcfce7;
+  border: 1px solid #bbf7d0;
+  border-radius: 6px;
+  color: #166534;
+  font-weight: 500;
+}
+
+.success-message small {
+  color: #6b7280;
+  font-size: 0.875rem;
 }
 
 /* Error section */

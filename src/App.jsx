@@ -1,13 +1,33 @@
-import { useState } from "react";
-import { useAccount, useSignMessage } from "wagmi";
+import { useState, useEffect } from "react";
+import {
+  useAccount,
+  useSignMessage,
+  useWriteContract,
+  useReadContract,
+} from "wagmi";
 import { recoverMessageAddress } from "viem";
+import { ethers } from "ethers";
 import "./App.css";
+
+// Contract configuration
+const MESSAGE_BOARD_ADDRESS = "0xDD4014AabE02BC60dBaDcc43b45aF7c2E4d69356"; // Deployed on Base Mainnet
+const MESSAGE_BOARD_ABI = [
+  "function storeMessage(string calldata message) external",
+  "function getMessages() external view returns (tuple(address user, string message, uint256 timestamp)[] memory)",
+  "function getMessageCount() external view returns (uint256)",
+  "function getMessage(uint256 index) external view returns (tuple(address user, string message, uint256 timestamp) memory)",
+  "event MessageStored(address indexed user, string message, uint256 timestamp)",
+];
 
 function App() {
   const { address, isConnected } = useAccount();
   const { signMessage, data: signature, error, isPending } = useSignMessage();
+  const { writeContract: storeMessage, isPending: isStoring } =
+    useWriteContract();
   const [message, setMessage] = useState("");
   const [recoveredAddress, setRecoveredAddress] = useState("");
+  const [storedMessages, setStoredMessages] = useState([]);
+  const [isStored, setIsStored] = useState(false);
 
   const handleSignMessage = async () => {
     if (!message.trim()) {
@@ -40,9 +60,30 @@ function App() {
     }
   };
 
+  const handleStoreMessage = async () => {
+    if (!message.trim()) {
+      alert("Please enter a message to store");
+      return;
+    }
+
+    try {
+      await storeMessage({
+        address: MESSAGE_BOARD_ADDRESS,
+        abi: MESSAGE_BOARD_ABI,
+        functionName: "storeMessage",
+        args: [message],
+      });
+      setIsStored(true);
+    } catch (err) {
+      console.error("Error storing message:", err);
+      alert("Error storing message on-chain");
+    }
+  };
+
   const resetAll = () => {
     setMessage("");
     setRecoveredAddress("");
+    setIsStored(false);
   };
 
   return (
@@ -118,6 +159,36 @@ function App() {
                   ? "✅ Address matches connected wallet!"
                   : "❌ Address does not match connected wallet"}
               </p>
+            </div>
+          </section>
+        )}
+
+        {/* On-Chain Storage */}
+        {signature && (
+          <section className="storage-section">
+            <h2>5. Store on Base</h2>
+            <div className="result-box">
+              <p>Store your signed message on Base blockchain as proof:</p>
+              <button
+                onClick={handleStoreMessage}
+                disabled={
+                  !isConnected || !message.trim() || isStoring || isStored
+                }
+                className="store-button"
+              >
+                {isStoring
+                  ? "Storing..."
+                  : isStored
+                  ? "✅ Stored on Base!"
+                  : "Store on Base"}
+              </button>
+              {isStored && (
+                <p className="success-message">
+                  🎉 Your message has been stored on Base blockchain!
+                  <br />
+                  <small>Contract: {MESSAGE_BOARD_ADDRESS}</small>
+                </p>
+              )}
             </div>
           </section>
         )}
