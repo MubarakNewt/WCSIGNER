@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useAccount, useWriteContract, useReadContract } from "wagmi";
 
 import "./App.css";
-// update
 // Contract configuration
 const MESSAGE_BOARD_ADDRESS = "0xDD4014AabE02BC60dBaDcc43b45aF7c2E4d69356"; // Deployed on Base Mainnet
 const MESSAGE_BOARD_ABI = [
